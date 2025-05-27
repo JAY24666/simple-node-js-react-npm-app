@@ -21,5 +21,12 @@ pipeline {
                 sh 'npm install --save-dev jest-junit'
             }
         }
+
+        stage("Build"){
+
+            steps{
+                sh 'npm run build'
+            }
+        }
     }
 }
