@@ -41,5 +41,24 @@ pipeline {
                 junit 'junit.xml'
             }
         }
+
+         stage("Run Code Analysis"){
+            environment {
+                SCANNER_HOME = tool 'SonarScanner'
+            }
+            steps {
+
+                withSonarQubeEnv('Sonarserver') {
+                   sh '''$SCANNER_HOME/bin/sonar-scanner \
+                       -Dsonar.projectKey=MyNpm \
+                       -Dsonar.projectName=NpmProject \
+                       -Dsonar.sources=. \
+                       -Dsonar.analysis.mode=publish \
+                       -Dsonar.projectVersion=${BUILD_NUMBER}-${GIT_COMMIT_SHORT}
+                    
+                    '''
+                }
+            }
+        }
     }
 }
