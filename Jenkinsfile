@@ -1,6 +1,10 @@
 pipeline {
     agent any
-
+ environment {
+        NEXUS_URL = 'http://3.80.124.151:8081'
+        NEXUS_REPO = 'npm-releases'
+        CREDENTIALS_ID = 'nexus-creds'
+    }
     stages {
 
         stage('install  os deps') {
@@ -68,5 +72,25 @@ pipeline {
             }
 
         }
+        stage('Upload to Nexus') 
+        {
+            steps {
+                script {
+                    def packageFile = sh(
+                        script: "ls *.tgz",
+                        returnStdout: true
+                    ).trim()
+
+                    withCredentials([usernamePassword(credentialsId: "${env.CREDENTIALS_ID}", usernameVariable: 'admin', passwordVariable: 'Administrator@123')]) {
+                        sh """
+                        curl -v --user $USERNAME:$PASSWORD \
+                            --upload-file ${packageFile} \
+                            ${NEXUS_URL}/repository/${NEXUS_REPO}/${packageFile}
+                        """
+                    }
+                }
+            }
+        }
     }
 }
+
