@@ -7,6 +7,13 @@
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1"
   },
+  "devDependencies": {
+    "jest-junit": "^16.0.0"
+  },
+  "jest-junit": {
+    "outputDirectory": ".",
+    "outputName": "junit.xml"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
